@@ -1,0 +1,20 @@
+{% extends "LLog/base.html" %}
+
+{% block content %}
+
+    <ul>
+        <h3>Tópicos:</h3>
+
+        {% for topic in topics %}
+            <li>
+                <a href="{% url 'topic' topic.id %}">{{ topic }}</a>
+            </li>
+        {% empty %}
+            <li>Não há tópicos aqui...</li>
+        {% endfor %}
+
+    </ul>
+
+    <a href="{% url 'new_topic' %}">Adicionar Tópico</a>
+
+{% endblock content %}

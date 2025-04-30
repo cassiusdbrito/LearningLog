@@ -1,0 +1,27 @@
+{% extends "LLog/base.html" %}
+
+{% block content %}
+
+    <h3>Tópico: {{ topic }}</h3>
+
+    <p><a href="{% url 'add_entry' topic.id %}">Adicione uma nova anotação</a></p>
+
+    <h4> Entradas:</h4>
+
+    <ul>
+        {% for entry in entries %}
+           <li>
+            <p>{{entry.date_added  | date:'M d, Y H:i'}}</p>
+            <p>{{entry.text | linebreaks}}</p>
+            <p>
+                <a href="{% url 'edit_entry' entry.id %}">Editar anotação</a>
+            </p>
+           </li>
+    </ul>
+    {% empty %}
+        Tópico vazio
+    {% endfor %}
+    
+   
+
+{% endblock content %}

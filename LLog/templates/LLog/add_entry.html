@@ -1,0 +1,14 @@
+{% extends 'LLog/base.html' %}
+
+{%block content%}
+
+<p> <a href="{% url 'topic' topic.id %}">{{topic}}</a></p>
+<p>Anotação:</p>
+
+<form action="{% url 'add_entry' topic.id %}" method="post">
+    {% csrf_token %}
+    {{form.as_p}}
+    <button name='submit'>Adicionar</button>
+</form>    
+
+{%endblock content%}
