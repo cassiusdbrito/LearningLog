@@ -9,7 +9,14 @@ from django.contrib import messages
 
 def index(request):
     '''Página principal do LLog'''
-    return  render(request, "LLog/index.html")
+    if request.user.is_authenticated:
+        topics = Topic.objects.filter(owner=request.user).order_by('-date_added')
+    else:
+        topics = []
+    
+    context = {'topics': topics}
+    return render(request, 'LLog/index.html', context)
+    
 
 @login_required
 def topics(request):
