@@ -1,17 +1,17 @@
-[project]
+[tool.poetry]
 name = "learninglog"
 version = "0.1.0"
-description = "Aprendendo Django"
-authors = [
-    {name = "Your Name",email = "you@example.com"}
-]
-readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "django (>=5.2,<6.0)"
-]
+description = ""
+authors = ["Cassius"]
+package-mode = false  # se não quiser empacotar o projeto
 
+[tool.poetry.dependencies]
+python = ">=3.12"
+django = ">=5.2,<6.0"
+django-bootstrap5 = "^25.1"
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
+requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
