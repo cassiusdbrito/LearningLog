@@ -1,15 +1,46 @@
 {% extends 'LLog/base.html' %}
 
 {% block content %}
+<div class="max-w-2xl mx-auto px-4 py-8">
+    <!-- Cabeçalho com botão de voltar -->
+    <div class="mb-6">
+        <a href="{% url 'topic' topic.id %}" class="inline-flex items-center text-blue-600 hover:text-blue-800">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+            </svg>
+            Voltar para {{ topic }}
+        </a>
+        <h2 class="text-2xl font-bold text-gray-800 mt-2">Editar Anotação</h2>
+    </div>
 
-<p>
-    <a href="{% url 'topic' topic.id %}"> {{ topic }} </a>
-</p>
+    <!-- Formulário de edição -->
+    <form action="{% url 'edit_entry' entry.id %}" method="post" class="bg-white p-6 rounded-lg shadow-md">
+        {% csrf_token %}
+        
+        <!-- Campo Texto -->
+        <div class="mb-6">
+            <label for="id_text" class="block text-sm font-medium text-gray-700 mb-2">Conteúdo:</label>
+            <textarea 
+                name="text" 
+                id="id_text" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                rows="10"
+                required
+            >{{ form.text.value|default_if_none:'' }}</textarea>
+            
+            {% if form.text.errors %}
+                {% for error in form.text.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
 
-<form action="{% url 'edit_entry' entry.id %}" method = "post">
-    {% csrf_token %}
-    {{form.as_p}}
-    <button name="submit">Salvar</button>
-</form>
-
-{% endblock content %}
+        <!-- Botão de Salvar -->
+        <div class="flex justify-end">
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-md shadow-sm transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Salvar Alterações
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

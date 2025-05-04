@@ -1,57 +1,82 @@
-{% load django-bootstrap3 %}
-
 <!DOCTYPE html>
 <html lang="pt-br">
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="description" content="Aplicação para anotações." />
-        <meta name="keywords" content="anotações, anotação" />
-        <meta name="author" content="Jefferson Lobato"/>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Aplicação para anotações.">
+    <meta name="keywords" content="anotações, anotação">
+    <meta name="author" content="Jefferson Lobato">
 
-        <title>Learning Log</title>
+    <title>Learning Log</title>
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Ícones (opcional) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
 
-        {% bootstrap_css %}
-        {% bootstrap_javascript %}
-        
-    </head>
-
-    <body>
-        <nav class="navbar navbar-default navbar-static-top">
-            <div class="container">
-                <div class="navbar-header">
-                    <button
-                        type="button"
-                        class="navbar-toggle collapsed"                    
-                        data-toggle="collapse"
-                        data-target="#navbar"
-                        aria-expanded="false"
-                    >                       
-                    </button>
-                    <a class="navbar-brand" href="{% url 'index' %}">Learning Log</a>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Navbar -->
+    <nav class="bg-white shadow-md">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="flex justify-between h-16">
+                <!-- Logo e itens principais -->
+                <div class="flex items-center">
+                    <a href="{% url 'index' %}" class="text-xl font-bold text-blue-600">Learning Log</a>
+                    <div class="hidden md:flex ml-10 space-x-4">
+                        <a href="{% url 'topics' %}" class="px-3 py-2 text-gray-700 hover:text-blue-600">Tópicos</a>
+                    </div>
                 </div>
-            
-                <div id="navbar" class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav"> 
-                        <li><a href="{% url 'topics' %}">Tópicos</a></li>
-                    </ul>
                 
-                    <ul class="nav navbar-nav navbar-right">
-                        {% if user.is_authenticated %}
-                            <li><a>Olá, {{ user.username }}</a></li>
-                            <li><a href="{% url 'logout' %}">Sair</a></li>
-                        {% else %}
-                            <li><a href="{% url 'register' %}">Registrar</a></li>
-                            <li><a href="{% url 'login' %}">Entrar</a></li>
-                        {% endif %}
-                    </ul>
+                <!-- Itens do lado direito -->
+                <div class="hidden md:flex items-center space-x-4">
+                    {% if user.is_authenticated %}
+                        <span class="text-gray-600">Olá, {{ user.username }}</span>
+                        <a href="{% url 'logout' %}" class="px-3 py-2 text-red-600 hover:text-red-800">Sair</a>
+                    {% else %}
+                        <a href="{% url 'register' %}" class="px-3 py-2 text-gray-700 hover:text-blue-600">Registrar</a>
+                        <a href="{% url 'login' %}" class="px-3 py-2 text-gray-700 hover:text-blue-600">Entrar</a>
+                    {% endif %}
+                </div>
+                
+                <!-- Botão mobile -->
+                <div class="md:hidden flex items-center">
+                    <button class="mobile-menu-button">
+                        <i class="fas fa-bars text-gray-700"></i>
+                    </button>
                 </div>
             </div>
-        </nav>
-    </body>
+        </div>
+        
+        <!-- Menu mobile (hidden) -->
+        <div class="mobile-menu hidden md:hidden bg-gray-100">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{% url 'topics' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Tópicos</a>
+                {% if user.is_authenticated %}
+                    <span class="block px-3 py-2 text-gray-600">Olá, {{ user.username }}</span>
+                    <a href="{% url 'logout' %}" class="block px-3 py-2 text-red-600 hover:text-red-800">Sair</a>
+                {% else %}
+                    <a href="{% url 'register' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Registrar</a>
+                    <a href="{% url 'login' %}" class="block px-3 py-2 text-gray-700 hover:text-blue-600">Entrar</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
 
+    <!-- Conteúdo principal -->
+    <main class="max-w-6xl mx-auto px-4 py-6">
+        {% block content %}{% endblock content %}
+    </main>
+
+    <!-- Script para menu mobile -->
+    <script>
+        const btn = document.querySelector('.mobile-menu-button');
+        const menu = document.querySelector('.mobile-menu');
+        
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+    </script>
+</body>
 </html>
-
- 
-{% block content %}{% endblock content %}

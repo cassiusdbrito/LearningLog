@@ -4,6 +4,8 @@ from .forms import TopicForms, EntryForms
 from django.http import HttpResponseRedirect, Http404
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
 
 def index(request):
     '''Página principal do LLog'''
@@ -48,6 +50,14 @@ def new_topic(request):
     return render(request, 'LLog/new_topic.html', context)
 
 @login_required
+def delete_topic(request, topic_id):
+    topic = Topic.objects.get(id=topic_id)
+    topic.delete()
+    
+    messages.success(request, "Tópico excluído com sucesso")
+    return HttpResponseRedirect(reverse('topics'))
+    
+@login_required
 def add_entry(request, topic_id):
     
     topic = Topic.objects.get(id = topic_id)
@@ -87,3 +97,12 @@ def edit_entry(request, entry_id):
         
     context = {'entry': entry, 'topic':topic, 'form': form}
     return render(request, 'LLog/edit_entry.html', context)
+
+@login_required
+def delete_entry(request, entry_id):
+    entry = Entry.objects.get(id=entry_id)
+    topic = entry.topic
+
+    entry.delete()
+
+    return HttpResponseRedirect(reverse('topic', args=[topic.id]))

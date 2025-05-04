@@ -1,13 +1,80 @@
 {% extends 'LLog/base.html' %}
 
 {% block content %}
+<div class="max-w-md mx-auto my-10 bg-white p-8 rounded-lg shadow-md">
+    <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Criar Nova Conta</h2>
 
-    <form action="{% url 'register' %}" method ="post">
+    <form action="{% url 'register' %}" method="post" class="space-y-4">
         {% csrf_token %}
-        {{form.as_p}}
+        
+        <!-- Campo Username -->
+        <div>
+            <label for="id_username" class="block text-sm font-medium text-gray-700 mb-1">Nome de usuário:</label>
+            <input 
+                type="text" 
+                name="username" 
+                id="id_username" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+                {% if form.username.value %}value="{{ form.username.value }}"{% endif %}
+            >
+            {% if form.username.errors %}
+                {% for error in form.username.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
 
-        <button name="submit">Cadastrar</button>
-        <input type="hidden" name="next" value="{% url 'index' %}"/> 
+        <!-- Campo Password1 -->
+        <div>
+            <label for="id_password1" class="block text-sm font-medium text-gray-700 mb-1">Senha:</label>
+            <input 
+                type="password" 
+                name="password1" 
+                id="id_password1" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+            >
+            {% if form.password1.errors %}
+                {% for error in form.password1.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Campo Password2 -->
+        <div>
+            <label for="id_password2" class="block text-sm font-medium text-gray-700 mb-1">Confirmação de senha:</label>
+            <input 
+                type="password" 
+                name="password2" 
+                id="id_password2" 
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                required
+            >
+            {% if form.password2.errors %}
+                {% for error in form.password2.errors %}
+                    <p class="mt-1 text-sm text-red-600">{{ error }}</p>
+                {% endfor %}
+            {% endif %}
+        </div>
+
+        <!-- Botão de Cadastro -->
+        <div class="pt-4">
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md shadow-sm transition duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Cadastrar
+            </button>
+        </div>
+
+        <!-- Link para login -->
+        <div class="text-center pt-4">
+            <p class="text-sm text-gray-600">
+                Já tem uma conta? 
+                <a href="{% url 'login' %}" class="text-blue-600 hover:text-blue-800">Faça login</a>
+            </p>
+        </div>
+
+        <input type="hidden" name="next" value="{% url 'index' %}">
     </form>
-
-{% endblock content %}
+</div>
+{% endblock %}

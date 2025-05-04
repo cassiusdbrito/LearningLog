@@ -39,9 +39,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'LLog',
     'users',
-
-    #Apps de terceiros
-    'bootstrap3',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +127,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = '/users/login'
 
-BOOTSTRAP3 = {
-    'include_jquery': True,
+BOOTSTRAP5 = {
+    'theme_url': 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css',
+    
+    # Inclui jQuery (não é mais obrigatório no Bootstrap 5, mas pode ser útil)
+    'include_jquery': False,
+    
+    # Configurações de formulários
+    'set_placeholder': True,
+    'required_css_class': 'required',
+    'success_css_class': 'success',
 }

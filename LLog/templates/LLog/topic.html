@@ -1,27 +1,77 @@
 {% extends "LLog/base.html" %}
 
 {% block content %}
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <!-- Cabeçalho com botões -->
+    <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-bold text-gray-800">{{ topic }}</h2>
+        
+        <div class="flex space-x-4">
+            <a href="{% url 'add_entry' topic.id %}" class="flex items-center bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md shadow-sm transition duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
+                </svg>
+                Nova Anotação
+            </a>
+            
+            <form action="{% url 'delete_topic' topic.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" 
+                        class="flex items-center px-3 py-2 text-red-600 hover:text-red-800 border border-red-200 hover:bg-red-50 rounded-md transition"
+                        onclick="return confirm('Tem certeza que deseja excluir este tópico e todas as suas anotações?')">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                        <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                    </svg>
+                    Excluir Tópico
+                </button>
+            </form>
+        </div>
+    </div>
 
-    <h3>Tópico: {{ topic }}</h3>
+    <!-- Lista de Anotações -->
+    <div class="space-y-6">
+        <h4 class="text-xl font-semibold text-gray-700 mb-4">Entradas:</h4>
 
-    <p><a href="{% url 'add_entry' topic.id %}">Adicione uma nova anotação</a></p>
-
-    <h4> Entradas:</h4>
-
-    <ul>
         {% for entry in entries %}
-           <li>
-            <p>{{entry.date_added  | date:'M d, Y H:i'}}</p>
-            <p>{{entry.text | linebreaks}}</p>
-            <p>
-                <a href="{% url 'edit_entry' entry.id %}">Editar anotação</a>
-            </p>
-           </li>
-    </ul>
-    {% empty %}
-        Tópico vazio
-    {% endfor %}
-    
-   
-
+        <div class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition duration-200 relative">
+            <!-- Cabeçalho da anotação -->
+            <div class="flex justify-between items-start mb-3">
+                <span class="text-sm text-gray-500">
+                    {{ entry.date_added|date:'d/m/Y H:i' }}
+                </span>
+                <a href="{% url 'edit_entry' entry.id %}" class="text-blue-600 hover:text-blue-800 text-sm">
+                    Editar
+                </a>
+            </div>
+            
+            <!-- Texto da anotação -->
+            <div class="prose max-w-none text-gray-700 mb-8">
+                {{ entry.text|linebreaks }}
+            </div>
+            
+            <!-- Botão de Excluir (canto inferior direito) -->
+            <div class="absolute bottom-4 right-4">
+                <form action="{% url 'delete_entry' entry.id %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" 
+                            class="text-red-500 hover:text-red-700 text-sm flex items-center"
+                            onclick="return confirm('Tem certeza que deseja excluir esta anotação?')">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd" />
+                        </svg>
+                        Excluir
+                    </button>
+                </form>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center py-12 bg-gray-50 rounded-lg">
+            <p class="text-gray-500">Nenhuma anotação encontrada neste tópico.</p>
+            <a href="{% url 'add_entry' topic.id %}" class="mt-4 inline-block text-blue-600 hover:text-blue-800">
+                Criar primeira anotação
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
 {% endblock content %}

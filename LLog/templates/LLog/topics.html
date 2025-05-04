@@ -1,20 +1,42 @@
 {% extends "LLog/base.html" %}
 
 {% block content %}
+<div class="max-w-3xl mx-auto px-4 py-8">
+    <!-- Cabeçalho -->
+    <div class="flex justify-between items-center mb-8">
+        <h2 class="text-2xl font-bold text-gray-800">Tópicos</h2>
+        <a href="{% url 'new_topic' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition duration-200">
+            + Novo Tópico
+        </a>
+    </div>
 
-    <ul>
-        <h3>Tópicos:</h3>
-
-        {% for topic in topics %}
-            <li>
-                <a href="{% url 'topic' topic.id %}">{{ topic }}</a>
+    <!-- Lista de Tópicos -->
+    <div class="bg-white rounded-lg shadow-md overflow-hidden">
+        <ul class="divide-y divide-gray-200">
+            {% for topic in topics %}
+            <li class="hover:bg-gray-50 transition duration-150">
+                <a href="{% url 'topic' topic.id %}" class="block px-6 py-4 text-blue-600 hover:text-blue-800">
+                    <div class="flex justify-between items-center">
+                        <span class="font-medium">{{ topic }}</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                </a>
             </li>
-        {% empty %}
-            <li>Não há tópicos aqui...</li>
-        {% endfor %}
+            {% empty %}
+            <li class="px-6 py-4 text-center text-gray-500">
+                Nenhum tópico encontrado. Crie seu primeiro tópico!
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
 
-    </ul>
-
-    <a href="{% url 'new_topic' %}">Adicionar Tópico</a>
-
+    <!-- Botão para mobile -->
+    <div class="mt-6 md:hidden">
+        <a href="{% url 'new_topic' %}" class="block w-full bg-blue-600 hover:bg-blue-700 text-white text-center py-2 px-4 rounded-lg transition duration-200">
+            + Adicionar Tópico
+        </a>
+    </div>
+</div>
 {% endblock content %}
